@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <input
+            type="text" 
+            placeholder="例如：吃饭睡觉打豆豆；   提示加回车即可添加任务" 
+            class="task-input"
+            v-on:keyup.enter='addTodo("传入的数据",$event)'
+            v-model='todo'
+        >
+        <ul class="task-count" v-show='list.length'>
+            <li>
+                {{ unfinishedTaskNum }}个任务未完成
+            </li>
+            <li class="action">
+                <a class="active" href="#all">所有任务</a>
+                <a href="#unfinished">未完成的任务</a>
+                <a href="#finished">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+            <span class="on-task-tip" v-show='!list.length'>还没有添加任何任务</span>
+            <ul class="todo-list">
+                <li class="todo" v-for='item in filteredList' :class='{ completed: item.isChecked, editing: item === edtorTodos}'>
+                    <div class="view">
+                        <input class="toggle" type="checkbox" v-model='item.isChecked'>
+                        <label @dblclick='edtorTodo(item)'>{{ item.title }}</label>
+                        <button class="destory" @click='deleteTodo(item)'></button>
+                    </div>
+                    <input
+                        type="text" 
+                        class="edit" 
+                        v-model='item.title' 
+                        v-focus='edtorTodos === item'
+                        @blur='edtorTodoEnd(item)'
+                        @keyup.enter='edtorTodoEnd(item)'
+                        @keyup.esc='cancelTodo(item)'
+                    >
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="./app.js"></script>
+</body>
+</html>
